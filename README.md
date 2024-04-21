@@ -1,9 +1,139 @@
 # FoodOrderingApplication
 Fullstack Angular and SpringBoot project
+Repos: https://github.com/orgs/udemy-dev-withK8s-AWS-codedecode/repositories
+PPT: https://docs.google.com/presentation/d/10yM2esLSyXUrY0qOuR9-JfoXwm9UEMRbVYDnAC9-fVM/edit#slide=id.g25f43485316_0_0
+Documentation (Jenkins doc): https://docs.google.com/document/d/1yNbHndHMdeOUBryxLpwh6k9HpUVm_NYw-MebrhD2QGg/edit#heading=h.wq12uxm22fxt
 
 ############
 
-Jenkins Sonar And Argo CD Doc
+## Chocolatey Installation and choco commands
+Chocolatey Installation
+To install Chocolatey, please follow the steps below:
+
+Open your web browser and go to the Chocolatey website: https://chocolatey.org/install.
+
+Follow the instructions provided on the Chocolatey website to install Chocolatey on your system.
+
+
+
+After successfully installing Chocolatey, you can use the following commands to install different CLI tools:
+
+To install AWS CLI, open a command prompt or terminal and type: choco install awscli.
+
+To install EKSctl, open a command prompt or terminal and type: choco install eksctl.
+
+############
+
+## Deployment Steps
+According to the AWS documentation, follow the steps below:
+
+Run the following command to download the required IAM policy file:
+
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.7/docs/install/iam_policy.json        
+
+Create an IAM policy named "AWSLoadBalancerControllerIAMPolicy" using the downloaded policy document in your AWS region (e.g., eu-west-3):
+
+aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json --region eu-west-3        
+
+Associate the IAM OIDC provider with your EKS cluster in your AWS region (e.g., eu-west-3):
+
+eksctl utils associate-iam-oidc-provider --region=eu-west-3 --cluster=aws-eks-cluster1 --approve        
+
+Create an IAM service account for the "aws-load-balancer-controller" in the "kube-system" namespace of your EKS cluster (e.g., aws-eks-cluster1) in your AWS region (e.g., eu-west-3). Use the appropriate AWS account ID and IAM policy ARN:
+
+eksctl create iamserviceaccount --cluster=aws-eks-cluster1 --namespace=kube-system --region eu-west-3 --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::YOUR_AWS_ACCOUNT_ID:policy/AWSLoadBalancerControllerIAMPolicy --approve
+Important: Ensure that you modify "782482296161" with your AWS account ID, replace "eu-west-3" with the appropriate AWS region, and substitute "aws-eks-cluster1" with the respective name of your AWS cluster.
+
+       
+
+Apply the Cert Manager YAML file for installation:
+
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml        
+
+Download the YAML file for the AWS Load Balancer Controller from the following URL:
+
+
+
+Download YAML File        
+
+Remove the specified code block from the downloaded YAML file:
+
+
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+  namespace: kube-system
+        
+Edit the "Deployment" section in the YAML file by changing the following parameters:
+
+
+
+spec:
+      containers:
+        - args:
+            - --cluster-name=your-cluster-name
+            - --ingress-class=alb
+            - --aws-vpc-id=vpc-xxxxxxxx
+            - --aws-region=region-code
+        
+Replace the image name with:
+
+codedecode25/aws-load-balancer:v2.4.7        
+
+Apply the edited YAML file:
+
+kubectl apply -f v2_4_7_full.yaml
+
+############
+
+## Installation command
+
+Maven:
+        sudo yum update
+        sudo yum install -y maven
+        mvn -version
+    
+Install Amazon Corretto JDK 11:
+sudo yum install java-11-amazon-corretto-headless
+Update the system, install Docker, and configure it to start on system boot:
+        sudo yum update -y
+        sudo yum install -y docker
+        sudo service docker start
+        sudo chkconfig docker on 
+    
+Download Jenkins repository configuration, install Jenkins, and start it:
+        sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+        sudo yum install jenkins -y
+        sudo systemctl enable jenkins
+        sudo systemctl start jenkins
+    
+Install NVM (Node Version Manager) and Node.js version 16:
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+        . ~/.nvm/nvm.sh
+        nvm install 16
+    
+Install Git:
+sudo yum install -y git
+Check the status of Jenkins service:
+sudo systemctl status jenkins
+Retrieve the initial admin password for Jenkins:
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+Add Jenkins user to the docker group to grant access:
+sudo usermod -aG docker jenkins
+Run SonarQube in Docker container:
+docker run -d -p 9000:9000 --name sonarqube sonarqube
+Check the logs of the SonarQube container:
+docker logs -f sonarqube
+
+############
+
+## Jenkins Sonar And Argo CD Doc
 
 Create an ec2 instance t2.xlarge
 
