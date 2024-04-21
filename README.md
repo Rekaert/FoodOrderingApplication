@@ -1,7 +1,10 @@
 # FoodOrderingApplication
 Fullstack Angular and SpringBoot project
+
 Repos: https://github.com/orgs/udemy-dev-withK8s-AWS-codedecode/repositories
+
 PPT: https://docs.google.com/presentation/d/10yM2esLSyXUrY0qOuR9-JfoXwm9UEMRbVYDnAC9-fVM/edit#slide=id.g25f43485316_0_0
+
 Documentation (Jenkins doc): https://docs.google.com/document/d/1yNbHndHMdeOUBryxLpwh6k9HpUVm_NYw-MebrhD2QGg/edit#heading=h.wq12uxm22fxt
 
 
