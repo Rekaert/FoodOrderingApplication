@@ -4,7 +4,6 @@ Repos: https://github.com/orgs/udemy-dev-withK8s-AWS-codedecode/repositories
 PPT: https://docs.google.com/presentation/d/10yM2esLSyXUrY0qOuR9-JfoXwm9UEMRbVYDnAC9-fVM/edit#slide=id.g25f43485316_0_0
 Documentation (Jenkins doc): https://docs.google.com/document/d/1yNbHndHMdeOUBryxLpwh6k9HpUVm_NYw-MebrhD2QGg/edit#heading=h.wq12uxm22fxt
 
-############
 
 ## Chocolatey Installation and choco commands
 Chocolatey Installation
@@ -22,7 +21,6 @@ To install AWS CLI, open a command prompt or terminal and type: choco install aw
 
 To install EKSctl, open a command prompt or terminal and type: choco install eksctl.
 
-############
 
 ## Deployment Steps
 According to the AWS documentation, follow the steps below:
@@ -89,7 +87,6 @@ Apply the edited YAML file:
 
 kubectl apply -f v2_4_7_full.yaml
 
-############
 
 ## Installation command
 
@@ -131,7 +128,6 @@ docker run -d -p 9000:9000 --name sonarqube sonarqube
 Check the logs of the SonarQube container:
 docker logs -f sonarqube
 
-############
 
 ## Jenkins Sonar And Argo CD Doc
 
